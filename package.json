@@ -1,0 +1,19 @@
+{
+  "name": "gateways-api",
+  "version": "0.0.1",
+  "description": "gateways - sample project managing gateways ",
+  "main": "src/server.js",
+  "author": "Fidel Ernesto",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon src/server.js"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.1.3",
+    "express": "^4.18.2",
+    "mongoose": "^7.2.2",
+    "nodemon": "^2.0.22"
+  }
+}
