@@ -63,7 +63,7 @@ const deleteGatewayById = async (req, res) => {
   try {
     const gateway = await Gateway.findByIdAndRemove(req.params.id);
     if (!gateway) {
-      return res.status(404).json({ error: 'Gateway not found' });
+      return res.status(400).json({ error: 'Invalid Gateway ID' });
     }
     res.json({ message: 'Gateway deleted successfully' });
   } catch (err) {
