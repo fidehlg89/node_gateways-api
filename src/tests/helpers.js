@@ -1,7 +1,7 @@
 const { app } = require("..");
 const supertest = require("supertest");
 
-const api = supertest(app);
+const api = supertest(app); // Create a supertest instance using the Express app
 
 const initialGateways = [
   {
@@ -33,9 +33,9 @@ const initialGateways = [
 ];
 
 const getAllGateways = async () => {
-  const response = await api.get("/gateways");
+  const response = await api.get("/gateways"); // Send a GET request to the "/gateways" endpoint using the supertest instance
   return {
-    contents: response.body.map((gateway) => gateway.content),
+    contents: response.body.map((gateway) => gateway.content), // Extract the contents from the response body
     response,
   };
 };

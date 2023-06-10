@@ -25,6 +25,35 @@ describe("GET all Gateways", () => {
     const response = await api.get("/gateways");
     expect(response.body).toHaveLength(initialGateways.length);
   });
+
+  test('return an error if the gateway has more than 10 devices', async () => {
+    const gatewayData = {
+      serialNumber: 'ABC12345',
+      name: 'Gateway',
+      ipAddress: '192.168.100.1',
+      devices: [
+        { uid: 1, vendor: 'Vendor 1', dateCreated: new Date(), status: 'online' },
+        { uid: 2, vendor: 'Vendor 2', dateCreated: new Date(), status: 'online' },
+        { uid: 3, vendor: 'Vendor 3', dateCreated: new Date(), status: 'online' },
+        { uid: 4, vendor: 'Vendor 4', dateCreated: new Date(), status: 'online' },
+        { uid: 5, vendor: 'Vendor 5', dateCreated: new Date(), status: 'online' },
+        { uid: 6, vendor: 'Vendor 6', dateCreated: new Date(), status: 'online' },
+        { uid: 7, vendor: 'Vendor 7', dateCreated: new Date(), status: 'online' },
+        { uid: 8, vendor: 'Vendor 8', dateCreated: new Date(), status: 'online' },
+        { uid: 9, vendor: 'Vendor 9', dateCreated: new Date(), status: 'online' },
+        { uid: 10, vendor: 'Vendor 10', dateCreated: new Date(), status: 'online' },
+        { uid: 11, vendor: 'Vendor 10', dateCreated: new Date(), status: 'online' },
+      ],
+    };
+
+    const response = await request(app)
+      .post('/api/gateways') // Ruta para crear un nuevo gateway
+      .send(gatewayData);
+
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe('The gateway can have a maximum of 10 devices.');
+  });
+
 });
 
 describe("Create a Gateway", () => {
