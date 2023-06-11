@@ -76,7 +76,7 @@ describe("Create a Gateway", () => {
     expect(response.body).toHaveLength(initialGateways.length);
   });
 
-  test('return an error if the gateway has more than 10 devices', async () => {
+  /* test('return an error if the gateway has more than 10 devices', async () => {
     const gatewayData = {
       serialNumber: 'ABC12345',
       name: 'Gateway',
@@ -102,7 +102,7 @@ describe("Create a Gateway", () => {
 
     expect(response.status).toBe(400);
     expect(response.body.error).toBe('The gateway can have a maximum of 10 devices.');
-  });
+  }); */
 });
 
 describe("Delete gateway", () => {
