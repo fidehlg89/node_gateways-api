@@ -4,27 +4,26 @@ on:
   push:
     branches:
       - dev
-    
+
 jobs:
   build:
-    runs-on: ubuntu-latest
-    
+    runs-on: ubuntu-22.04
+
     env:
-        MONGODB_URI: ${{ secrets.MONGODB_URI }}
-        MONGODB_URI_TEST: ${{ secrets.MONGODB_URI_TEST }}
+      MONGODB_URI: ${{ secrets.MONGODB_URI }}
+      MONGODB_URI_TEST: ${{ secrets.MONGODB_URI_TEST }}
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v2
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 16.x
-          
+          node-version: 16
 
       - name: Install dependencies
-        run: yarn
+        run: yarn install
 
       - name: Run tests
         run: yarn test
