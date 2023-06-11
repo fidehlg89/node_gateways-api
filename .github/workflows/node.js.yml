@@ -8,6 +8,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    env:
+        MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        MONGODB_URI_TEST: ${{ secrets.MONGODB_URI_TEST }}
 
     steps:
       - name: Checkout code
@@ -17,6 +21,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
+          
 
       - name: Install dependencies
         run: yarn
