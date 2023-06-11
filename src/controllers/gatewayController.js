@@ -3,14 +3,21 @@ const Gateway = require('../models/Gateway');
 // Create a new gateway
 const createGateway = async (req, res) => {
   try {
-    const gateway = new Gateway(req.body); // Create a new Gateway instance with the request body
-    const result = await gateway.save(); // Save the gateway to the database
-    res.status(201).json(result); // Return the saved gateway as JSON with a status of 201 (Created)
+    // Create a new Gateway instance with the request body data
+    const gateway = new Gateway(req.body);
+
+    // Save the gateway to the database
+    const result = await gateway.save();
+
+    // Return the created gateway in the response with status code 201 (Created)
+    res.status(201).json(result);
   } catch (err) {
-    if (err.name === 'Validation Error') {
-      res.status(400).json({ error: err.message }); // Return a JSON error message with a status of 400 (Bad Request) if there is a validation error
+    // Handle validation errors separately
+    if (err.name === 'ValidationError') {
+      res.status(400).json({ error: err.message });
     } else {
-      res.status(500).json({ error: 'Internal server error', message: err.message }); // Return a JSON error message with a status of 500 (Internal Server Error) for other errors
+      // Handle other errors as internal server errors
+      res.status(500).json({ error: 'Internal server error', message: err.message });
     }
   }
 };
@@ -18,42 +25,59 @@ const createGateway = async (req, res) => {
 // Get all gateways
 const getAllGateways = async (req, res) => {
   try {
-    const gateways = await Gateway.find().populate('devices'); // Retrieve all gateways from the database and populate the 'devices' field
-    res.json(gateways); // Return the gateways as JSON
+    // Find all gateways in the database and populate the 'devices' field
+    const gateways = await Gateway.find().populate('devices');
+
+    // Return the gateways in the response
+    res.json(gateways);
   } catch (err) {
-    res.status(500).json({ error: 'Internal server error' }); // Return a JSON error message with a status of 500 (Internal Server Error) if there is an error
+    // Handle errors as internal server errors
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
 // Get a single gateway by ID
 const getGatewayById = async (req, res) => {
   try {
-    const gateway = await Gateway.findById(req.params.id).populate('devices'); // Find a gateway by ID and populate the 'devices' field
+    // Find a gateway by the provided ID and populate the 'devices' field
+    const gateway = await Gateway.findById(req.params.id).populate('devices');
+
+    // If the gateway is not found, return a 404 error
     if (!gateway) {
-      return res.status(404).json({ error: 'Gateway not found' }); // Return a JSON error message with a status of 404 (Not Found) if the gateway is not found
+      return res.status(404).json({ error: 'Gateway not found' });
     }
-    res.json(gateway); // Return the gateway as JSON
+
+    // Return the gateway in the response
+    res.json(gateway);
   } catch (err) {
-    res.status(500).json({ error: 'Internal server error' }); // Return a JSON error message with a status of 500 (Internal Server Error) if there is an error
+    // Handle errors as internal server errors
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
 // Update a gateway by ID
 const updateGatewayById = async (req, res) => {
   try {
+    // Find a gateway by the provided ID and update it with the request body data
     const gateway = await Gateway.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    }); // Find a gateway by ID and update it with the request body, enabling the return of the updated gateway and running validators
+      new: true, // Return the updated gateway in the response
+      runValidators: true, // Run the model validators on the updated data
+    });
+
+    // If the gateway is not found, return a 404 error
     if (!gateway) {
-      return res.status(404).json({ error: 'Gateway not found' }); // Return a JSON error message with a status of 404 (Not Found) if the gateway is not found
+      return res.status(404).json({ error: 'Gateway not found' });
     }
-    res.json(gateway); // Return the updated gateway as JSON
+
+    // Return the updated gateway in the response
+    res.json(gateway);
   } catch (err) {
+    // Handle validation errors separately
     if (err.name === 'ValidationError') {
-      res.status(400).json({ error: err.message }); // Return a JSON error message with a status of 400 (Bad Request) if there is a validation error
+      res.status(400).json({ error: err.message });
     } else {
-      res.status(500).json({ error: 'Internal server error' }); // Return a JSON error message with a status of 500 (Internal Server Error) for other errors
+      // Handle other errors as internal server errors
+      res.status(500).json({ error: 'Internal server error' });
     }
   }
 };
@@ -61,13 +85,19 @@ const updateGatewayById = async (req, res) => {
 // Delete a gateway by ID
 const deleteGatewayById = async (req, res) => {
   try {
-    const gateway = await Gateway.findByIdAndRemove(req.params.id); // Find a gateway by ID and remove it from the database
+    // Find a gateway by the provided ID and remove it from the database
+    const gateway = await Gateway.findByIdAndRemove(req.params.id);
+
+    // If the gateway is not found, return a 400 error
     if (!gateway) {
-      return res.status(400).json({ error: 'Invalid Gateway ID' }); // Return a JSON error message with a status of 400 (Bad Request) if the gateway is not found
+      return res.status(400).json({ error: 'Invalid Gateway ID' });
     }
-    res.json({ message: 'Gateway deleted successfully' }); // Return a JSON success message
+
+    // Return a success message in the response
+    res.json({ message: 'Gateway deleted successfully' });
   } catch (err) {
-    res.status(500).json({ error: 'Internal server error' }); // Return a JSON error message with a status of 500 (Internal Server Error) if there is an error
+    // Handle errors as internal server errors
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 

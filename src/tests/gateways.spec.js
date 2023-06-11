@@ -25,35 +25,6 @@ describe("GET all Gateways", () => {
     const response = await api.get("/gateways");
     expect(response.body).toHaveLength(initialGateways.length);
   });
-
-  test('return an error if the gateway has more than 10 devices', async () => {
-    const gatewayData = {
-      serialNumber: 'ABC12345',
-      name: 'Gateway',
-      ipAddress: '192.168.100.1',
-      devices: [
-        { uid: 1, vendor: 'Vendor 1', dateCreated: new Date(), status: 'online' },
-        { uid: 2, vendor: 'Vendor 2', dateCreated: new Date(), status: 'online' },
-        { uid: 3, vendor: 'Vendor 3', dateCreated: new Date(), status: 'online' },
-        { uid: 4, vendor: 'Vendor 4', dateCreated: new Date(), status: 'online' },
-        { uid: 5, vendor: 'Vendor 5', dateCreated: new Date(), status: 'online' },
-        { uid: 6, vendor: 'Vendor 6', dateCreated: new Date(), status: 'online' },
-        { uid: 7, vendor: 'Vendor 7', dateCreated: new Date(), status: 'online' },
-        { uid: 8, vendor: 'Vendor 8', dateCreated: new Date(), status: 'online' },
-        { uid: 9, vendor: 'Vendor 9', dateCreated: new Date(), status: 'online' },
-        { uid: 10, vendor: 'Vendor 10', dateCreated: new Date(), status: 'online' },
-        { uid: 11, vendor: 'Vendor 10', dateCreated: new Date(), status: 'online' },
-      ],
-    };
-
-    const response = await request(app)
-      .post('/api/gateways') // Ruta para crear un nuevo gateway
-      .send(gatewayData);
-
-    expect(response.status).toBe(400);
-    expect(response.body.error).toBe('The gateway can have a maximum of 10 devices.');
-  });
-
 });
 
 describe("Create a Gateway", () => {
@@ -104,6 +75,34 @@ describe("Create a Gateway", () => {
 
     expect(response.body).toHaveLength(initialGateways.length);
   });
+
+  test('return an error if the gateway has more than 10 devices', async () => {
+    const gatewayData = {
+      serialNumber: 'ABC12345',
+      name: 'Gateway',
+      ipAddress: '193.169.100.1',
+      devices: [
+        { uid: 1, vendor: 'Vendor 1', dateCreated: new Date(), status: 'online' },
+        { uid: 2, vendor: 'Vendor 2', dateCreated: new Date(), status: 'online' },
+        { uid: 3, vendor: 'Vendor 3', dateCreated: new Date(), status: 'online' },
+        { uid: 4, vendor: 'Vendor 4', dateCreated: new Date(), status: 'online' },
+        { uid: 5, vendor: 'Vendor 5', dateCreated: new Date(), status: 'online' },
+        { uid: 6, vendor: 'Vendor 6', dateCreated: new Date(), status: 'online' },
+        { uid: 7, vendor: 'Vendor 7', dateCreated: new Date(), status: 'online' },
+        { uid: 8, vendor: 'Vendor 8', dateCreated: new Date(), status: 'online' },
+        { uid: 9, vendor: 'Vendor 9', dateCreated: new Date(), status: 'online' },
+        { uid: 10, vendor: 'Vendor 10', dateCreated: new Date(), status: 'online' },
+        { uid: 11, vendor: 'Vendor 10', dateCreated: new Date(), status: 'online' },
+      ],
+    };
+
+    const response = await api
+      .post('/gateways') // Ruta para crear un nuevo gateway
+      .send(gatewayData);
+
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe('The gateway can have a maximum of 10 devices.');
+  });
 });
 
 describe("Delete gateway", () => {
@@ -127,19 +126,17 @@ describe("Delete gateway", () => {
     expect(response.body).toHaveLength(initialGateways.length);
   });
 
-  test('a gateway that has a valid id but do not exist can not be deleted', async () => {
-    const validObjectIdThatDoNotExist = '60451827152dc22ad768f442'
-    await api
-      .delete(`/gateways/${validObjectIdThatDoNotExist}`)
-      .expect(400)
+  test("a gateway that has a valid id but do not exist can not be deleted", async () => {
+    const validObjectIdThatDoNotExist = "60451827152dc22ad768f442";
+    await api.delete(`/gateways/${validObjectIdThatDoNotExist}`).expect(400);
 
-    const { response } = await getAllGateways()
+    const { response } = await getAllGateways();
 
-    expect(response.body).toHaveLength(initialGateways.length)
-  })
+    expect(response.body).toHaveLength(initialGateways.length);
+  });
 });
 
-describe("Update gateway", ()=> {
+describe("Update gateway", () => {
   test("Update an existing gateway", async () => {
     const { response: firstResponse } = await getAllGateways();
     const { body: gateways } = firstResponse;
@@ -167,7 +164,9 @@ describe("Update gateway", ()=> {
 
     const { response: secondResponse } = await getAllGateways();
     const { body: updatedGateways } = secondResponse;
-    const updatedGatewaySerialNumbers = updatedGateways.map(gateway => gateway.serialNumber);
+    const updatedGatewaySerialNumbers = updatedGateways.map(
+      (gateway) => gateway.serialNumber
+    );
 
     expect(updatedGateways).toHaveLength(initialGateways.length);
     expect(updatedGatewaySerialNumbers).toContain(updatedGateway.serialNumber);
@@ -190,13 +189,15 @@ describe("Update gateway", ()=> {
       ],
     };
 
-    await api.put(`/gateways/${invalidGatewayId}`).send(updatedGateway).expect(500);
+    await api
+      .put(`/gateways/${invalidGatewayId}`)
+      .send(updatedGateway)
+      .expect(500);
 
     const { response } = await getAllGateways();
 
     expect(response.body).toHaveLength(initialGateways.length);
   });
-
 
   test("Try to update a non-existent gateway", async () => {
     const nonExistentGatewayId = "60451827152dc22ad768f442";
@@ -215,16 +216,16 @@ describe("Update gateway", ()=> {
       ],
     };
 
-    await api.put(`/gateways/${nonExistentGatewayId}`).send(updatedGateway).expect(404);
+    await api
+      .put(`/gateways/${nonExistentGatewayId}`)
+      .send(updatedGateway)
+      .expect(404);
 
     const { response } = await getAllGateways();
 
     expect(response.body).toHaveLength(initialGateways.length);
   });
-
-
-
-})
+});
 
 afterAll(() => {
   moongose.connection.close();
