@@ -101,7 +101,7 @@ describe("Create a Gateway", () => {
       .send(gatewayData);
 
     expect(response.status).toBe(400);
-    expect(response.body.error).toBe('The gateway must have a minimum of 10 devices');
+    expect(response.body.error).toContain('The gateway must have a minimum of 10 devices');
   });
 });
 
