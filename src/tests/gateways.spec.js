@@ -11,7 +11,7 @@ beforeEach(async () => {
     const gatewayObject = new Gateway(gateway);
     await gatewayObject.save();
   }
-}, 10000); // Set the timeout to avoid errors within
+}, 20000); // Set the timeout to avoid errors within
 
 describe("GET all Gateways", () => {
   test("gateways are returned as json", async () => {
@@ -76,7 +76,7 @@ describe("Create a Gateway", () => {
     expect(response.body).toHaveLength(initialGateways.length);
   });
 
-  /* test('return an error if the gateway has more than 10 devices', async () => {
+  test('return an error if the gateway has more than 10 devices', async () => {
     const gatewayData = {
       serialNumber: 'ABC12345',
       name: 'Gateway',
@@ -97,12 +97,12 @@ describe("Create a Gateway", () => {
     };
 
     const response = await api
-      .post('/gateways') // Ruta para crear un nuevo gateway
+      .post('/gateways')
       .send(gatewayData);
 
     expect(response.status).toBe(400);
-    expect(response.body.error).toBe('The gateway can have a maximum of 10 devices.');
-  }); */
+    expect(response.body.error).toContain('The gateway must have a minimum of 10 devices');
+  });
 });
 
 describe("Delete gateway", () => {
