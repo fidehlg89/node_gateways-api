@@ -9,7 +9,8 @@
     "dev": "cross-env NODE_ENV=development nodemon src/index.js",
     "start": "cross-env NODE_ENV=production node src/index",
     "test": "cross-env NODE_ENV=test jest --verbose",
-    "test:watch": "yarn test -- --watch"
+    "test:watch": "yarn test -- --watch",
+    "build": "netlify deploy --prod"
   },
   "dependencies": {
     "@netlify/functions": "^2.4.1",
@@ -21,7 +22,9 @@
     "eslint": "^8.42.0",
     "express": "^4.18.2",
     "mongoose": "^7.2.2",
-    "serverless-http": "^3.2.0"
+    "serverless-http": "^3.2.0",
+    "netlify-cli": "^12.7.2",
+    "netlify-lambda": "^2.0.15"
   },
   "devDependencies": {
     "jest": "^29.5.0",
