@@ -3,6 +3,7 @@ const { connectToDatabase } = require("./mongo");
 const gatewayRoutes = require("./routes/gateways");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+import serverless from "serverless-http";
 
 require("dotenv").config();
 
@@ -34,3 +35,5 @@ module.exports = {
   app,
   server
 };
+
+export const handler = serverless(api);
