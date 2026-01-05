@@ -59,3 +59,6 @@ To run the tests, use the following command:
 
    ```shell
    yarn test
+
+## URL
+- https://fe-gateways-api.onrender.com/gateways
