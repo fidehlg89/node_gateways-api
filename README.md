@@ -46,6 +46,9 @@ Once the server is running, you can access the API endpoints using the following
 
 http://localhost:<port_number>
 
+## URL
+- https://fe-gateways-api.onrender.com/gateways
+
 The available endpoints are:
 
     POST /gateways - Create a new gateway
@@ -59,6 +62,3 @@ To run the tests, use the following command:
 
    ```shell
    yarn test
-
-## URL
-- https://fe-gateways-api.onrender.com/gateways
